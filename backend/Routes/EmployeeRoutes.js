@@ -1,11 +1,19 @@
 import express from 'express'
-import createEmployee from '../Controllers/EmployeeController.js';
+import {createEmployee, deleteEmployeeById, getAllEmployees, getEmployeeById, updateEmployeeById} from '../Controllers/EmployeeController.js';
+import cloudinaryFileUploader from '../Middlewares/FileUploader.js';
 const routes = express.Router() 
 
-routes.get('/',(req,res)=>{
-    res.send('Get all Employees ');
-});
 
-routes.post('/',(createEmployee))
+// POST /api/employees - with image upload
+routes.get('/', getAllEmployees)
+
+
+routes.post('/', cloudinaryFileUploader.single('profileImag e'), createEmployee) //store the image to cloudinary and return file path(of) that we will store in our db
+
+routes.put('/:id', cloudinaryFileUploader.single('profileImag e'), updateEmployeeById) //store the image to cloudinary and return file path(of) that we will store in our db
+
+routes.get('/:id', getEmployeeById)
+
+routes.delete('/:id', deleteEmployeeById)
 
 export default routes;
