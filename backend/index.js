@@ -1,5 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import bodyParser from 'body-parser'; //body-parser is a middleware in Express used to parse the incoming request body before your route handlers access it.
+// By default, Express doesn't understand the body of POST, PUT, or PATCH requests. body-parser helps extract data sent by the client.
 
 const app = express();
 
@@ -10,6 +12,13 @@ const PORT = process.env.PORT || 8080;
 import './Models/db.js' //MongoDB connection file
 
 import EmployeeRouter from './Routes/EmployeeRoutes.js'
+
+//body-parser middleware
+// Parses JSON data from request body
+app.use(bodyParser.json()) 
+// Parses URL-encoded data (like form submissions)
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.get('/',(req,res)=>{
     res.send("Server is Running")
