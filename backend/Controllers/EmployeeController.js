@@ -63,16 +63,52 @@ const updateEmployeeById = async (req,res) =>{
 
 const getAllEmployees = async (req,res) =>{
     try{
-        const emps = await EmployeeModel.find({}); //to get all documents inside our collection in db
-        
+         //implementing search functonality and pagination
+        let {page, limit, search} = req.query;
+
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 5;
+
+        const skip = (page-1)*limit; //Calculates how many documents to skip based on the current page and limit.
+        //page= 1 => (1-1)*5 = 0 skip
+        //page= 2 => (2-1)*5 = 5 skip
+
+        let searchCriteria = {};
+        if(search){
+            searchCriteria = {
+                name: { 
+                    //Regex (short for Regular Expression) is a powerful pattern-matching tool used to search, match, and manipulate text based on specific patterns.
+                    $regex: search,
+                    $options: 'i' //case in-sensitive
+                }
+            }
+        }
+
+        const totalEmployees = await EmployeeModel.countDocuments(searchCriteria) //to show how many documents are there who match the search criteria
+
+        const emps = await EmployeeModel.find(searchCriteria) //to get all searchCriteria satisfying documents inside our collection in db
+            .skip(skip)
+            .limit(limit)
+            .sort({updatedAt: -1})
+
+        const totalPages = Math.ceil(totalEmployees/limit);
         res.status(200)
             .json({
                 message: 'All Employees',
                 sucess: true,
-                data: emps
+                data: {
+                    employees: emps, 
+                    pagination: {
+                        totalEmployees,
+                        currentPage: page,
+                        totalPages,
+                        pageSize: limit
+                    }
+                }
             })
     }
     catch(err){
+        console.log(err);
         res.status(500).json({
             message: 'Internal Server Error',
             success: false,
