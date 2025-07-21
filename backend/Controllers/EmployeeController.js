@@ -74,6 +74,8 @@ const getAllEmployees = async (req,res) =>{
         //page= 1 => (1-1)*5 = 0 skip
         //page= 2 => (2-1)*5 = 5 skip
 
+        
+
         let searchCriteria = {};
         if(search){
             searchCriteria = {

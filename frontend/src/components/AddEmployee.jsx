@@ -59,6 +59,8 @@ const AddEmployee = ({showModal, setShowModal, fetchEmployees, updateEmpObj}) =>
             console.log(success, message)
             if(success){
                 notify(message, 'success');
+                 fetchEmployees('', 1, 5); // 👈 force page 1
+                
             }else{
                 notify(message, 'error')
             }
