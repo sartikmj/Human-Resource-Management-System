@@ -1,5 +1,6 @@
 import EmployeeModel from '../Models/EmployeeModel.js'
 
+
 const createEmployee = async (req,res) =>{
     try{
         const body = req.body;

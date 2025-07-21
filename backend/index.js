@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors';
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'; //body-parser is a middleware in Express used to parse the incoming request body before your route handlers access it.
 // By default, Express doesn't understand the body of POST, PUT, or PATCH requests. body-parser helps extract data sent by the client.
@@ -6,6 +7,8 @@ import bodyParser from 'body-parser'; //body-parser is a middleware in Express u
 const app = express();
 
 dotenv.config();
+
+app.use(cors());
 
 const PORT = process.env.PORT || 8080;
 
